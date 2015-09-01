@@ -23,6 +23,3 @@ class CarModel(webapp2.RequestHandler):
 
 			results = {'carModels':[x.get().to_dict() for x in keys]}
 			self.response.write(json.dumps(results))
-
-			#for x in keys:
-			#	self.response.write(json.dumps(x.get().to_dict()))
