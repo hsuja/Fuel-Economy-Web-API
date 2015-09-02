@@ -60,12 +60,12 @@ class SpecCar(webapp2.RequestHandler):
 			user.put()
 
 		#add car to CarModel 			
-
 		p_key = ndb.Key(db_defs.CarModel, 'p_key')
 		q = db_defs.CarModel.query(ancestor = p_key)
 		q = q.filter(db_defs.CarModel.year == year)
 		q = q.filter(db_defs.CarModel.make == make)
 		q = q.filter(db_defs.CarModel.model == model)
+		
 		if q.count(limit=None) == 0:
 			new_carModel = db_defs.CarModel(parent = p_key)
 			new_carModel.year = year
@@ -102,9 +102,6 @@ class SpecCar(webapp2.RequestHandler):
 
 				results = {'specCars':[x.get().to_dict() for x in keys]}
 				self.response.write(json.dumps(results))
-				
-				#for x in keys:
-				#	self.response.write(json.dumps(x.get().to_dict()))
 
 		else: 
 			self.response.status = 400
