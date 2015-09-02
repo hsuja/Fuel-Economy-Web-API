@@ -28,7 +28,6 @@ class FillUp(webapp2.RequestHandler):
 		longitude = self.request.get('longitude', default_value = None)
 
 		if date:
-
 			new_fillUp.date = (datetime.strptime(date, '%m-%d-%Y')).date()
 
 		if distance: 
@@ -65,7 +64,7 @@ class FillUp(webapp2.RequestHandler):
 			make = specCar.make
 			model = specCar.model
 
-			#update avg fuel economy of specific car
+			# Update avg fuel economy of specific car
 			q = db_defs.FillUp.query(ancestor = specCar_key)
 			count = 0
 			total_fe = 0
@@ -77,19 +76,21 @@ class FillUp(webapp2.RequestHandler):
 				specCar.fuelecon = avg_fe
 				specCar.put()
 
-		#update CarModel
-
+		# Update CarModel
 		p_key = ndb.Key(db_defs.CarModel, 'p_key')
 		q = db_defs.CarModel.query(ancestor = p_key)
 		q = q.filter(db_defs.CarModel.year == year)
 		q = q.filter(db_defs.CarModel.make == make)
 		q = q.filter(db_defs.CarModel.model == model)
+		
 		keys = q.fetch(keys_only = True)
 		carModel_key = keys[0]
 		carModel = carModel_key.get()
+		
 		new_distance = carModel.distance + distance
 		new_fuelused = carModel.fuelused + fuelused
 		new_fuelecon = new_distance/new_fuelused
+		
 		carModel.distance = new_distance
 		carModel.fuelused = new_fuelused
 		carModel.fuelecon = new_fuelecon
@@ -120,8 +121,6 @@ class FillUp(webapp2.RequestHandler):
 					keys = q.fetch(keys_only = True)
 					results = {'fillUps':[x.get().to_dict() for x in keys]}
 					self.response.write(json.dumps(results))
-					#for x in keys:
-					#	self.response.write(json.dumps(x.get().to_dict()))
 
 			else:
 				self.response.status = 400
