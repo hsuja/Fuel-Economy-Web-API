@@ -37,7 +37,6 @@ class User(webapp2.RequestHandler):
 		key = new_user.put()
 		out = new_user.to_dict()
 		self.response.write(json.dumps(out))
-
 		return
 
 	def get(self, **kwargs):
@@ -48,8 +47,6 @@ class User(webapp2.RequestHandler):
 			return
 
 		if 'id' in kwargs:
-			#test = ndb.Key(db_defs.User, int(kwargs['id'])).get()
-			#self.response.write(test)
 			out = ndb.Key(db_defs.User, int(kwargs['id'])).get().to_dict()
 			self.response.write(json.dumps(out))
 		else: 
@@ -58,11 +55,6 @@ class User(webapp2.RequestHandler):
 			
 			results = {'users':[x.get().to_dict() for x in keys]}
 			self.response.write(json.dumps(results))
-
-
-			#for x in keys:
-			#	self.response.write(json.dumps(x.get().to_dict()))
-
 
 
 	def put(self, **kwargs):
